@@ -3,10 +3,12 @@ import getpass
 import re
 from functools import reduce
 
+class Bundler:
+    # prefix = "_Bundle-"
+    prefix = "Super"
+
 class Session:
     # Private vars
-    # _bundle_prefix = "_Bundle-"
-    _bundle_prefix = "Super"
 
     # Public vars
     api = None
@@ -29,14 +31,14 @@ class Session:
         if self.logged_in:
             print("Logging out of Google Play Music...", end='', flush=True)
             self.api.logout()
-            print(" Done!")
+            print(" done!")
 
     def get_all_tracks(self):
         return list(set(list(map(lambda track: track["id"], self.api.get_all_songs()))))
 
     def get_bundled_tracks(self):
         playlists = self.api.get_all_user_playlist_contents()
-        bundles = list(filter(lambda pl: re.match(self._bundle_prefix + ".*", pl["name"]), playlists))
+        bundles = list(filter(lambda pl: re.match(Bundler.prefix + ".*", pl["name"]), playlists))
         track_ids = []
         if len(bundles):
             tracks = reduce(lambda _tracks, bundle_x: _tracks + bundle_x["tracks"], bundles, [])
