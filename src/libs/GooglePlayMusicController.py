@@ -42,3 +42,6 @@ class Session:
             tracks = reduce(lambda _tracks, bundle_x: _tracks + bundle_x["tracks"], bundles, [])
             track_ids = list(set(list(map(lambda track: track["trackId"], tracks))))
         return track_ids
+
+    def get_unbundled_tracks(self):
+        return list(set(self.get_all_tracks())-set(self.get_bundled_tracks()))
