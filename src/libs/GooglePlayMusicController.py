@@ -31,6 +31,9 @@ class Session:
             self.api.logout()
             print(" Done!")
 
+    def get_all_tracks(self):
+        return list(set(list(map(lambda track: track["id"], self.api.get_all_songs()))))
+
     def get_bundled_tracks(self):
         playlists = self.api.get_all_user_playlist_contents()
         bundles = list(filter(lambda pl: re.match(self._bundle_prefix + ".*", pl["name"]), playlists))
