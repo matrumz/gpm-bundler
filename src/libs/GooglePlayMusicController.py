@@ -2,10 +2,7 @@ from gmusicapi import Mobileclient
 import getpass
 import re
 from functools import reduce
-
-class Bundler:
-    # prefix = "_Bundle-"
-    prefix = "Super"
+from libs.Bundler import Bundler
 
 class Session:
     # Private vars
