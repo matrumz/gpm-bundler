@@ -23,3 +23,6 @@ except FileNotFoundError:
 gpm = GPMC.Session(secrets["GooglePlayMusic"]["user"], secrets["GooglePlayMusic"]["pass"])
 while not gpm.logged_in:
     gpm = GPMC.Session()
+
+# Manually triggering destructor to avoid issue where encodings.ascii is removed by garbage collector before gpm.api.logout()
+gpm = None
