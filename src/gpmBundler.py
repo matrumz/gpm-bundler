@@ -24,5 +24,8 @@ gpm = GPMC.Session(secrets["GooglePlayMusic"]["user"], secrets["GooglePlayMusic"
 while not gpm.logged_in:
     gpm = GPMC.Session()
 
+# Run the program!
+gpm.bundle_unbundled_tracks()
+
 # Manually triggering destructor to avoid issue where encodings.ascii is removed by garbage collector before gpm.api.logout()
 gpm = None

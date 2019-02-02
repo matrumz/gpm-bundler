@@ -44,3 +44,35 @@ class Session:
 
     def get_unbundled_tracks(self):
         return list(set(self.get_all_tracks())-set(self.get_bundled_tracks()))
+
+    def bundle_unbundled_tracks(self):
+        created_playlists = []
+        playlist = None
+        for name, contents in Bundler.generate_bundles(self.get_unbundled_tracks()):
+            try:
+                playlist = (name, self.api.create_playlist(name, "gpmBundler generated playlist"))
+            except Error as create_playlist_e:
+                print(create_playlist_e)
+                print("Failed to create playlist '%s'. Purging..." % name)
+                self.purge_playlists(created_playlists)
+                break
+            else:
+                created_playlists.append(playlist)
+                try:
+                    self.api.add_songs_to_playlist(playlist[1], contents)
+                except Error as add_songs_e:
+                    print(add_songs_e)
+                    print("Failed to add songs to playlist '%s'" % name)
+                    self.purge_playlists(created_playlists)
+                    break
+                else:
+                    print("Playlist %s created and populated." % name)
+
+    def purge_playlists(self, playlists):
+        for p in playlists:
+            try:
+                self.api.delete_playlist(p[1])
+            except:
+                print("Failed to delete playlist '%s'" % p[0])
+            else:
+                print("Deleted playlist '%s'" % p[0])
